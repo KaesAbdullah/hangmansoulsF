@@ -1,0 +1,49 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Hangman Souls</title>
+    <link rel="icon" href="img/icons/logoAhorcado.png" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      rel="stylesheet"
+      href="https://fonts.googleapis.com/css2?family=Cinzel:wght@500;800&family=IM+Fell+English&display=swap"
+    />
+    <link rel="stylesheet" href="css/style.css" />
+  </head>
+  <body>
+    <main class="screen">
+      <h1 class="title">HANGMAN SOULS</h1>
+      <button class="item" id="start" type="button">Start</button>
+    </main>
+    <script src="js/common.js"></script>
+    <script>
+      function go() {
+        HS.sfx("menuSelect");
+        setTimeout(function () {
+          var language = new URLSearchParams(location.search).get("lang");
+          location.href =
+            "menu.html" +
+            (language ? "?lang=" + encodeURIComponent(language) : "");
+        }, 500);
+      }
+      var requestedLanguage = new URLSearchParams(location.search).get("lang");
+      if (requestedLanguage === "en" || requestedLanguage === "es") {
+        HS.setLanguage(requestedLanguage);
+      }
+      var savedLanguage = HS.load().language;
+      var spanish = savedLanguage === "es";
+      document.documentElement.lang = spanish ? "es" : "en";
+      document.title = spanish ? "Hangman Souls" : "Hangman Souls";
+      document.getElementById("start").textContent = spanish
+        ? "Comenzar"
+        : "Start";
+      document.getElementById("start").addEventListener("click", go);
+      document.addEventListener("keydown", function (e) {
+        if (e.key === "Enter" && e.target.id !== "start") go();
+      });
+    </script>
+  </body>
+</html>

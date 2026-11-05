@@ -1,0 +1,108 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Hangman Souls: Thank you</title>
+    <link rel="icon" href="img/icons/logoAhorcado.png" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      rel="stylesheet"
+      href="https://fonts.googleapis.com/css2?family=Cinzel:wght@500;800&family=IM+Fell+English&display=swap"
+    />
+    <link rel="stylesheet" href="css/style.css" />
+  </head>
+  <body>
+    <main class="screen bg-boss">
+      <div class="lore">
+        <p style="--d: 1s">
+          AT LAST, <span class="lore-defeated">SERAPHIEL, THE FALSE ONE</span>,
+          PERISHED.
+        </p>
+        <p style="--d: 4.2s">BY THE HAND OF AN UNKNOWN WARRIOR,</p>
+        <p style="--d: 7.4s">WHOSE SOUL WAS UNLIKE ANY OTHER,</p>
+        <p style="--d: 10.6s">THE ETERNAL LORD OF LIES WAS VANQUISHED.</p>
+        <p style="--d: 13.8s">...</p>
+        <p style="--d: 17s">
+          THE HERO LIFTED HIS HEAD AND GAZED INTO THE NIGHT SKY.
+        </p>
+        <p style="--d: 20.2s">
+          A <span class="lore-star">GREEN STAR</span> SHONE FROM A DISTANT
+          CORNER OF THE UNIVERSE.
+        </p>
+        <p style="--d: 23.4s">A SIGN OF PRIDE FROM A STAR UNKNOWN.</p>
+        <p style="--d: 26.6s">
+          YET THE UNIVERSE AWAITS <span class="lore-someone">SOMEONE</span>...
+          OR SOMETHING...
+        </p>
+        <p style="--d: 29.8s">FAR BEYOND OUR UNDERSTANDING.</p>
+        <p class="last" style="--d: 33s">IS IT REALLY OVER?</p>
+      </div>
+      <a class="btn" id="endingMainMenu" href="menu.html" style="--d: 36.2s"
+        >Main menu</a
+      >
+    </main>
+    <script src="js/common.js"></script>
+    <script src="js/i18n.js"></script>
+    <script>
+      (function () {
+        var requestedLanguage = new URLSearchParams(location.search).get(
+          "lang",
+        );
+        var language =
+          requestedLanguage === "es" ||
+          (requestedLanguage !== "en" && HS.load().language === "es")
+            ? "es"
+            : "en";
+        HS.setLanguage(language);
+        var text = HS_I18N[language];
+        document.documentElement.lang = language;
+        document.title = text.endingTitle;
+        var lines = [
+          "end1",
+          "end2",
+          "end3",
+          "end4",
+          "end5",
+          "end6",
+          "end7",
+          "end8",
+          "end9",
+          "end10",
+          "end11",
+        ];
+        var paragraphs = document.querySelectorAll(".lore p");
+        paragraphs.forEach(function (paragraph, index) {
+          if (!text[lines[index]]) return;
+          if (index === 0) {
+            paragraph.innerHTML = language === "es"
+              ? 'AL FIN, <span class="lore-defeated">SERAPHIEL, EL FALSO</span>, PERECIÓ.'
+              : 'AT LAST, <span class="lore-defeated">SERAPHIEL, THE FALSE ONE</span>, PERISHED.';
+          } else if (index === 6) {
+            paragraph.innerHTML = language === "es"
+              ? 'UNA <span class="lore-star">ESTRELLA VERDE</span> BRILLÓ DESDE UN RINCÓN REMOTO DEL UNIVERSO.'
+              : 'A <span class="lore-star">GREEN STAR</span> SHONE FROM A DISTANT CORNER OF THE UNIVERSE.';
+          } else if (index === 8) {
+            paragraph.innerHTML = language === "es"
+              ? 'Y, AUN ASÍ, EL UNIVERSO AGUARDA A <span class="lore-someone">ALGUIEN</span>... O A ALGO...'
+              : 'YET THE UNIVERSE AWAITS <span class="lore-someone">SOMEONE</span>... OR SOMETHING...';
+          } else {
+            paragraph.textContent = text[lines[index]];
+          }
+        });
+        var mainMenu = document.getElementById("endingMainMenu");
+        if (mainMenu) {
+          mainMenu.textContent = text.endingMain;
+          mainMenu.href = "menu.html?lang=" + encodeURIComponent(language);
+        }
+      })();
+      HS.endLore();
+      function showAll() {
+        document.body.classList.add("skip");
+      }
+      addEventListener("keydown", showAll);
+      addEventListener("pointerdown", showAll);
+    </script>
+  </body>
+</html>

@@ -1,0 +1,107 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Hangman Souls: Menu</title>
+    <link rel="icon" href="img/icons/logoAhorcado.png" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      rel="stylesheet"
+      href="https://fonts.googleapis.com/css2?family=Cinzel:wght@500;800&family=IM+Fell+English&display=swap"
+    />
+    <link rel="stylesheet" href="css/style.css" />
+  </head>
+  <body>
+    <main class="screen">
+      <h1 class="title">HANGMAN SOULS</h1>
+      <ul class="menu" id="menu">
+        <li><button class="item" id="new" type="button">New Game</button></li>
+        <li>
+          <button class="item" id="info" type="button">Information</button>
+        </li>
+        <li><button class="item" id="opts" type="button">Options</button></li>
+        <li><button class="item" id="exit" type="button">Exit</button></li>
+        <li class="debug-trigger-row"><button class="item debug-trigger" id="debugTrigger" type="button" aria-label="Debug activation">.</button></li>
+      </ul>
+    </main>
+
+    <div
+      class="overlay"
+      id="infoBox"
+      role="dialog"
+      aria-modal="true"
+      aria-labelledby="infoT"
+    >
+      <div class="card">
+        <h2 id="infoT">Information</h2>
+        <p id="infoVersion"></p>
+        <p id="infoCreator"></p>
+        <p id="infoCredits"></p>
+        <button class="btn" id="infoClose" type="button" data-close>
+          Understood
+        </button>
+      </div>
+    </div>
+
+    <div class="overlay" id="debugBox" role="dialog" aria-modal="true" aria-labelledby="debugTitle">
+      <div class="card">
+        <h2 id="debugTitle">DEBUG ACTIVATION</h2>
+        <label for="debugPassword" id="debugPrompt">Enter password for debug</label>
+        <input id="debugPassword" type="password" autocomplete="off" />
+        <p id="debugError" role="alert" hidden></p>
+        <button class="btn" id="debugSubmit" type="button">Activate</button>
+        <button class="btn" id="debugClose" type="button">Close</button>
+      </div>
+    </div>
+
+    <div
+      class="overlay"
+      id="optsBox"
+      role="dialog"
+      aria-modal="true"
+      aria-labelledby="optsT"
+    >
+      <div class="card">
+        <h2 id="optsT">Options</h2>
+        <label id="bgmLabel"
+          >MUSIC VOLUME
+          <input
+            type="range"
+            id="bgmVol"
+            min="0"
+            max="1"
+            step="0.05"
+            aria-label="Music volume"
+        /></label>
+        <label id="sfxLabel"
+          >SOUND EFFECTS VOLUME
+          <input
+            type="range"
+            id="sfxVol"
+            min="0"
+            max="1"
+            step="0.05"
+            aria-label="Sound effects volume"
+        /></label>
+        <div class="language-choice">
+          <label for="languageSelect" id="languageLabel"
+            >Language / Idioma</label
+          >
+          <select id="languageSelect" aria-label="Language">
+            <option value="en">English</option>
+            <option value="es">Español</option>
+          </select>
+        </div>
+        <button class="btn" id="optsClose" type="button" data-close>
+          Close
+        </button>
+      </div>
+    </div>
+
+    <script src="js/common.js"></script>
+    <script src="js/i18n.js"></script>
+    <script src="js/menu.js"></script>
+  </body>
+</html>

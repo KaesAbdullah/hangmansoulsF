@@ -1,0 +1,337 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Hangman Souls: Battle</title>
+  <link rel="icon" href="img/icons/logoAhorcado.png" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link rel="stylesheet"
+    href="https://fonts.googleapis.com/css2?family=Cinzel:wght@500;800&family=IM+Fell+English&display=swap" />
+  <link rel="stylesheet" href="css/style.css" />
+</head>
+
+<body class="game-page">
+  <main class="game">
+    <section class="stage" id="stage" aria-label="Battle arena">
+      <div class="arena" id="arena"></div>
+      <div class="arena" id="arena2"></div>
+      <div class="hud-p">
+        <img id="portrait" src="img/icons/playerIcon.png" alt="You" />
+        <div class="hpbar" id="hpbar" role="progressbar" aria-label="Health" aria-valuemin="0" aria-valuemax="100"
+          aria-valuenow="100">
+          <div class="hpin"><i id="hpGhost"></i><i id="hpFill"></i></div>
+          <div class="hpcounter" id="hpcounter">HP: 100/100</div>
+        </div>
+      </div>
+      <div class="callout" id="callout" aria-live="polite"></div>
+      <div class="levelTag">
+        <div class="lt-row lt-top"><span id="levelNum"></span></div>
+        <div class="lt-row lt-mid">
+          <div class="lt-icon-wrap">
+            <img id="levelIcon" src="img/icons/iconEnemy.png" alt="" />
+          </div>
+          <span id="levelText"></span>
+        </div>
+        <div class="lt-row lt-bot">
+          <span id="diffLabel">DIFFICULTY LEVEL:</span>
+          <b class="tier" id="diffText"></b>
+        </div>
+      </div>
+      <div class="hud-e">
+        <h1 id="eName"></h1>
+        <div class="status-icons" id="statusIcons"></div>
+      </div>
+      <div class="actor actor-p">
+        <img id="pSprite" src="img/sprites/playerIdle.gif" alt="Player" />
+      </div>
+      <div class="actor actor-e" id="eSlot" data-anchor="right">
+        <img id="eSprite" src="img/sprites/r1e1Idle.gif" alt="Enemy" />
+      </div>
+      <div class="boss-intro-name" id="bossIntroName" aria-hidden="true"></div>
+      <img id="gynnSprite" class="gynn-sprite" src="img/sprites/gynn_angel.gif" alt="" hidden />
+      <div class="soul-glow" id="soulGlow" aria-live="assertive"></div>
+    </section>
+
+    <section class="panel">
+      <div class="wrong">
+        <div class="gynn-skill-row" id="gynnSkillWrap" hidden>
+          <button class="itembtn passive" id="gynnSkill" type="button" aria-label="Gynn's Protection: passive">
+            <img src="img/icons/gynn_protection.png" alt="" /><span class="gynn-counter" id="gynnCounter">x3</span>
+          </button>
+          <span class="gynn-blessing-text" id="gynnBlessingText">ITEMS AND SKILLS ENHANCED!</span>
+        </div>
+        <div class="box itemrow">
+          <div class="itemgroup">
+            <h3>Items</h3>
+            <div class="itemlist">
+              <span class="itemwrap"><button class="itembtn" id="flask" type="button"
+                  aria-label="Flask: heal 40 health. Key 1">
+                  <img src="img/icons/flask.png" alt="" /><span class="flask-counter" id="flaskCounter">x1</span>
+                </button></span>
+              <span class="itemwrap"><button class="itembtn" id="shield" type="button"
+                  aria-label="Shield: raise or lower it. Blocks 30 damage from the next attack. Key 2">
+                  <img src="img/icons/shield.png" alt="" />
+                </button></span>
+              <span class="itemwrap" hidden><button class="itembtn" id="debugShield" type="button"
+                  aria-label="Debug Shield: unlimited perfect block. Key 0">
+                  <img src="img/icons/shield.png" alt="" />
+                </button></span>
+            </div>
+          </div>
+          <div class="itemgroup">
+            <h3>Skills</h3>
+            <div class="itemlist">
+              <span class="itemwrap"><button class="itembtn" id="dodge" type="button"
+                  aria-label="Dodge: 40 percent chance to avoid the next attack. Key 4">
+                  <img src="img/icons/dodge.png" alt="" />
+                </button></span>
+              <span class="itemwrap"><button class="itembtn" id="eye" type="button"
+                  aria-label="Magic Eye: may mark a correct letter. Key 3">
+                  <img src="img/icons/magicEye.png" alt="" />
+                </button></span>
+              <span class="itemwrap" hidden><button class="itembtn" id="tempShield" type="button"
+                  aria-label="Eye Shield: a temporary shield. Key 6">
+                  <img src="img/icons/shield.png" alt="" />
+                </button></span>
+              <span class="itemwrap"><button class="itembtn" id="freeze" type="button"
+                  aria-label="Freeze: freeze the enemy for the next letter. Key 5">
+                  <img src="img/icons/freeze.png" alt="" />
+                </button></span>
+            </div>
+          </div>
+        </div>
+        <div class="optrow">
+          <button class="btn optbtn" id="optBtn" type="button">
+            Options
+          </button>
+          <button class="btn optbtn" id="nextBtn" type="button" hidden>Next</button>
+        </div>
+      </div>
+      <div style="display: none;">
+        <div class="box" style="display: none;">
+          <p id="wrong" aria-live="polite"></p>
+        </div>
+      </div>
+      </div>
+      <div class="playwrap">
+        <div class="play">
+          <div class="word" id="word" role="img"></div>
+          <div class="keys" id="keys"></div>
+          <p class="tip" style="display: none;">
+            Type or tap a letter. Items: 1 Flask, 2 Shield. Skills: 3 Eye, 4
+            Dodge, 5 Freeze.
+          </p>
+        </div>
+      </div>
+      <div class="hintbox">
+        <div class="hint-heading">
+          <h2 id="hintTitle">Word hint</h2>
+          <button class="btn" id="speechSkip" type="button" hidden>Skip</button>
+        </div>
+        <div class="box">
+          <p id="hint"></p>
+        </div>
+        <button class="btn" id="hintGo" type="button" hidden>Continue</button>
+        <div class="p3-counter" id="p3Counter" hidden aria-hidden="true"></div>
+      </div>
+    </section>
+  </main>
+
+  <div class="overlay" id="howto" role="dialog" aria-modal="true" aria-labelledby="howT">
+    <div class="card">
+      <h2 id="howT">HOW TO PLAY</h2>
+      <div class="tutsteps">
+        <section class="tutcol">
+          <h3>MECHANICS</h3>
+          <p>
+            WELCOME TO HANGMAN SOULS!<br />
+            YOU ARE THE FIGURE ON THE LEFT, AND EACH ENEMY IS BOUND TO A
+            HIDDEN WORD.<br />
+            GUESS IT LETTER BY LETTER TO DESTROY IT.
+          </p>
+          <p>
+            EVERY WRONG LETTER LETS THE ENEMY STRIKE AND YOU LOSE HEALTH.<br />
+            THE ENEMY HAS NO HEALTH BAR, BUT IT FALLS THE MOMENT YOU COMPLETE
+            ITS WORD.<br />
+            WORD HINT ON THE RIGHT ARE THERE TO HELP YOU GUESS.
+          </p>
+        </section>
+        <section class="tutcol" hidden>
+          <h3>ITEMS &amp; SKILLS</h3>
+          <p class="tutline">
+            <img class="tuticon" src="img/icons/flask.png" alt="" /><span><b>THE FLASK</b> HEALS 40 HEALTH.</span>
+          </p>
+          <p class="tutline">
+            <img class="tuticon" src="img/icons/dodge.png" alt="" /><span><b>THE DODGE</b> HAS A 40% CHANCE TO AVOID THE
+              NEXT ATTACK
+              COMPLETELY.</span>
+          </p>
+          <div class="tut-unlocks">
+            <p>NEW ITEMS AND SKILLS WILL BE UNLOCKED DURING YOUR JOURNEY!</p>
+            <div class="tut-lock-icons">
+              <button class="tut-lock-icon" type="button" data-lock="shield" aria-label="Shield locked">
+                <img src="img/icons/shield.png" alt="" />
+              </button>
+              <button class="tut-lock-icon" type="button" data-lock="eye" aria-label="Magic Eye locked">
+                <img src="img/icons/magicEye.png" alt="" />
+              </button>
+              <button class="tut-lock-icon" type="button" data-lock="freeze" aria-label="Freeze locked">
+                <img src="img/icons/freeze.png" alt="" />
+              </button>
+            </div>
+          </div>
+        </section>
+        <section class="tutcol" hidden>
+          <h3>STATUS EFFECTS</h3>
+          <p class="tutline">
+            <img class="tuticon" src="img/icons/enemy_frozenStatus.png" alt="" /><span><b>FROZEN</b>: THE ENEMY WILL NOT
+              ATTACK ON YOUR NEXT
+              LETTER.</span>
+          </p>
+          <p class="tutline">
+            <img class="tuticon" src="img/icons/enemy_stunnedStatus.png" alt="" /><span><b>STUNNED</b>: THE ENEMY WILL
+              NOT ATTACK FOR 2 TURNS. A
+              STUNNED ENEMY GLOWS YELLOW AND TREMBLES.</span>
+          </p>
+        </section>
+      </div>
+      <div class="tutnav">
+        <button class="btn" id="tutNext" type="button">Next</button>
+      </div>
+    </div>
+  </div>
+
+  <div class="overlay" id="learn" role="dialog" aria-modal="true" aria-labelledby="learnT">
+    <div class="card">
+      <h2 id="learnT"></h2>
+      <img id="learnIcon" class="learn-icon" alt="" hidden />
+      <p id="learnBody"></p>
+      <button class="btn" id="learnGo" type="button">Understood</button>
+    </div>
+  </div>
+
+  <div class="final-defeat-overlay" id="finalDefeatOverlay" aria-hidden="true" hidden>
+    <div class="final-defeat-scream" id="finalDefeatScream">NOOOO....!!</div>
+  </div>
+
+  <div class="overlay" id="result" role="dialog" aria-modal="true" aria-labelledby="rTitle">
+    <div class="band">
+      <h2 id="rTitle"></h2>
+      <div id="rNote"></div>
+      <div class="actions">
+        <button class="btn" id="rBtn" type="button"></button>
+      </div>
+    </div>
+  </div>
+
+  <div class="banner" id="banner" aria-live="assertive"></div>
+
+  <div class="overlay" id="opening" role="dialog" aria-modal="true" aria-label="Beginning">
+    <div class="lorebox">
+      <div class="lore opening-part opening-part-one" id="openingPartOne">
+        <p style="--d: 0.8s">
+          A distant scream was heard all across the universe.
+        </p>
+        <p style="--d: 4s">
+          Legends say it came from
+          <span class="purity-hero">the chosen hero of purity</span>...
+        </p>
+        <p style="--d: 7.2s">
+          Who had defeated a great being:
+          <span class="lord_chaos">The Lord of Chaos</span>.
+        </p>
+        <p style="--d: 10.4s">Yet... the legend remains unknown.</p>
+        <button class="btn" id="openingContinue" type="button" style="--d: 13.6s">
+          Continue
+        </button>
+      </div>
+      <div class="lore opening-part opening-part-two" id="openingPartTwo" hidden>
+        <p style="--d: 0.8s">A unique warrior appeared from the unknown.</p>
+        <p style="--d: 4s">
+          Their soul was... different. And their mission...
+        </p>
+        <p style="--d: 7.2s">
+          Their mission was to unravel the falsehoods of this world.
+        </p>
+        <p class="opening-letter-by-letter" style="--d: 10.8s">
+          Letter by letter.
+        </p>
+        <p style="--d: 14.4s">
+          They would dethrone the false angel,
+          <span class="opening-red-emphasis">Seraphiel</span>, who brought nothing
+          but false hope to this world.
+        </p>
+        <p style="--d: 18s">
+          Yet the journey would not be easy.
+        </p>
+        <p style="--d: 21.2s">
+          For they would need the souls of
+          <span class="souls-great-beings">ten great beings</span>.
+        </p>
+        <p style="--d: 24.4s">
+          With those souls, the Gate of the Great Rift would carry them to the
+          <span class="opening-red-emphasis">false angel</span>.
+        </p>
+        <button class="btn" id="openingGo" type="button" style="--d: 26s">
+          Begin
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <div class="overlay" id="lore" role="dialog" aria-modal="true" aria-label="The final boss">
+    <div class="lorebox">
+      <div class="lore">
+        <p style="--d: 0.8s">
+          THE GATE OF GREAT LIFT STANDS BEFORE YOU.
+        </p>
+        <p style="--d: 4s">
+          NOW THAT ARKANIA, THE GATEKEEPER, IS DEAD...
+        </p>
+        <p style="--d: 7.2s">
+          ONLY ONE STRONG ENOUGH, WITH SOULS TO MATCH, CAN OPEN IT.
+        </p>
+        <p style="--d: 10.4s">
+          YOU HAVE GATHERED TEN GREAT SOULS. YOU MEET THE REQUIREMENTS.
+        </p>
+        <p style="--d: 13.6s">
+          THE GATE OF GREAT LIFT CONSUMES THE SOULS, AND ITS PASSAGEWAY OPENS.
+        </p>
+        <p style="--d: 16.8s">
+          NOW THE WARRIOR MAY ASCEND TO THE SKIES AND COMPLETE THEIR UNIQUE MISSION:
+        </p>
+        <p class="lore-seraphiel" style="--d: 20s">
+          DEFEAT THE FALSE ANGEL, <strong>SERAPHIEL</strong>.
+        </p>
+      </div>
+      <button class="btn" id="loreGo" type="button" style="--d: 25s">
+        I am ready
+      </button>
+    </div>
+  </div>
+
+  <div class="overlay" id="optsBox" role="dialog" aria-modal="true" aria-labelledby="optsT">
+    <div class="card">
+      <button class="modal-close" id="optClose" type="button" aria-label="Close options">×</button>
+      <h2 id="optsT">Options</h2>
+      <label id="bgmLabel">MUSIC VOLUME
+        <input type="range" id="bgmVol" min="0" max="1" step="0.05" aria-label="BGM volume" /></label>
+      <label id="sfxLabel">SOUND EFFECTS VOLUME
+        <input type="range" id="sfxVol" min="0" max="1" step="0.05" aria-label="SFX volume" /></label>
+
+      <a class="btn" id="optMainMenu" href="menu.html">Main menu</a>
+    </div>
+  </div>
+
+  <div class="itemtip" id="tip" role="tooltip" hidden></div>
+
+  <script src="js/common.js"></script>
+  <script src="js/i18n.js"></script>
+  <script src="js/levels.js"></script>
+  <script src="js/game.js"></script>
+</body>
+
+</html>
